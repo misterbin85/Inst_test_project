@@ -30,7 +30,7 @@ namespace Instagram
       {
           Driver.OpenPage<InstagramSignUpPage>(new Uri("https://www.instagram.com/"), new object[]{Driver})
                 .OpenLogin()
-                .LoginToInstagram("mister_albert_bin", "misterbin85", true)
+                .LoginToInstagram("", "", true)
                 .SearchForAHashTag("#montenegro")
                 .LoadMoreResults();
       }
