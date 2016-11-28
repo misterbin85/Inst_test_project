@@ -1,7 +1,8 @@
 ﻿using Instagram.Extensions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
-using OpenQA.Selenium.Support.UI;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Instagram.Pages
 {
@@ -15,6 +16,9 @@ namespace Instagram.Pages
         [FindsBy(How = How.ClassName, Using = "_oidfu")]
         private IWebElement LoadMoreButton;
 
+        [FindsBy(How = How.XPath, Using = @"//div[@class='_myci9']")]
+        private IList<IWebElement> LoadedRowsWithPanes;
+
 #endregion
 
 #region 'Constructor'
@@ -22,7 +26,7 @@ namespace Instagram.Pages
         public InstagramSearchResultsPage(IWebDriver driver)
             : base(driver)
         {
-            driver.Wait().Until(ExpectedConditions.ElementIsVisible(By.ClassName("_s53mj")));
+            driver.WaitForElementVisible(By.ClassName("_s53mj"));
             this.Driver = driver;
             PageFactory.InitElements(driver, this);
         }
@@ -36,6 +40,23 @@ namespace Instagram.Pages
             this.LoadMoreButton.ScrollIntoView(Driver);
             this.LoadMoreButton.Click();
             return this;
+        }
+
+        public InstagramSearchResultsPage MakeLike()
+        {
+            IList<IWebElement> panesInRow = this.LoadedRowsWithPanes.First().FindElements(By.TagName("a"));
+            foreach (var pane in panesInRow)
+            {
+                OpenPostDetails(pane).PutLikeAndClose();
+            }
+            return this;
+        }
+
+
+        public PostDetails OpenPostDetails(IWebElement pane)
+        {
+            pane.ClickJs(Driver);
+            return new PostDetails(Driver);                                               
         }
 
 #endregion

@@ -95,6 +95,7 @@
     <Compile Include="Pages\InstagramMainFeedPage.cs" />
     <Compile Include="Pages\InstagramSearchResultsPage.cs" />
     <Compile Include="Pages\InstagramSignUpPage.cs" />
+    <Compile Include="Pages\PostDetails.cs" />
     <Compile Include="SetUp.cs" />
     <Compile Include="TestsInChrome.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -32,7 +32,8 @@ namespace Instagram
                 .OpenLogin()
                 .LoginToInstagram("", "", true)
                 .SearchForAHashTag("#montenegro")
-                .LoadMoreResults();
+                .LoadMoreResults()
+                .MakeLike();
       }
 
     }
