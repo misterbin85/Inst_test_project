@@ -40,14 +40,11 @@ namespace Instagram.Pages
 
         #region 'Methods'
 
-        public InstagramMainFeedPage LoginToInstagram(string userName, string password, bool submit = false)
+        public InstagramMainFeedPage LoginToInstagram(string userName, string password)
         {
             this.UserName.SendKeys(userName);
             this.Password.SendKeys(password);
-            if (submit)
-            {
-                this.LoginButton.Click();
-            }
+            this.LoginButton.Click();
 
             return new InstagramMainFeedPage(Driver);
         }
