@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Instagram.Extensions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
@@ -16,6 +17,7 @@ namespace Instagram.Pages
         private const string OpenHeartPath = ".//span[contains(@class,'coreSpriteHeartOpen')]";
         private const string FullHeartPath = ".//span[contains(@class,'coreSpriteHeartFull')]";
         private const string CloseDetailsButtonPath = "//button[@class='_3eajp']";
+        private const string RightPaginatorArrowPath = "//a[contains(@class,'coreSpriteRightPaginationArrow')]";
 
 
         [FindsBy(How = How.XPath, Using = ArticlePath)]
@@ -27,6 +29,9 @@ namespace Instagram.Pages
         [FindsBy(How = How.XPath, Using = CloseDetailsButtonPath)]
         private IWebElement CloseButton;
 
+        [FindsBy(How = How.XPath, Using = RightPaginatorArrowPath)]
+        private IWebElement RightPaginatorArrow;
+
 #endregion
 
 
@@ -34,7 +39,8 @@ namespace Instagram.Pages
 
         public PostDetails(IWebDriver driver)
         {
-            driver.WaitForElementExists(By.XPath(ArticlePath), 5);
+            driver.WaitPageLoaded();
+            driver.WaitForElementExists(By.XPath(ArticlePath), 10);
             this.Driver = driver;
             PageFactory.InitElements(driver, this);
         }
@@ -46,14 +52,55 @@ namespace Instagram.Pages
 
         public InstagramSearchResultsPage PutLikeAndClose()
         {
-            if (!Driver.IsElementExists(By.XPath(OpenHeartPath), 1))
+            if (AlreadyLiked())
             {
-                Console.WriteLine("'Like' is already posted. Continue to next...");
                 return ClosePostDetailsPage();
             }
             this.OpenHeart.ClickJs(Driver);
             Driver.WaitForElementExists(By.XPath(FullHeartPath), 2);
             return ClosePostDetailsPage();
+        }
+        
+
+        private bool AlreadyLiked()
+        {
+            if (Driver.IsElementExists(By.XPath(OpenHeartPath), 1)) return false;
+
+            Console.WriteLine("'Like' is already posted. Continue to next...");
+            return true;
+        }
+
+        public InstagramSearchResultsPage MakeLikesOnPostDetails(int numberOfLikedPosts)
+        {
+            for (var i = 0; i < numberOfLikedPosts; i++)
+            {
+                if (AlreadyLiked())
+                {
+                    GoToNextPostDetails();                    
+                }
+                else
+                {
+                    PutLike();
+                    GoToNextPostDetails();
+                }
+            }
+                        
+            return ClosePostDetailsPage();
+        }
+
+
+        private void PutLike()
+        {
+            Driver.WaitForElementVisible(By.XPath(OpenHeartPath));
+            this.OpenHeart.ClickJs(Driver);
+            Driver.WaitForElementExists(By.XPath(FullHeartPath), 2);
+            Thread.Sleep(1500);
+        }
+
+        private PostDetails GoToNextPostDetails()
+        {
+            Driver.WaitForElementExists(By.XPath(RightPaginatorArrowPath), 2).ClickJs(Driver);
+            return new PostDetails(Driver);
         }
 
 

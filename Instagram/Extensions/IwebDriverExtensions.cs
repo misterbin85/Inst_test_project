@@ -27,6 +27,10 @@ namespace Instagram.Extensions
             driver.Wait().Until(d => (bool) (d as IJavaScriptExecutor).ExecuteScript("return document.readyState == 'complete'"));
         }
 
+        public static void WaitPageLoaded(this IWebDriver driver)
+        {
+            driver.Wait(7).Until(d => (bool)(d as IJavaScriptExecutor).ExecuteScript("return document.readyState == 'complete'"));
+        }
 
         public static IEnumerable<Cookie> GetBrowserCookies(this IWebDriver driver)
         {

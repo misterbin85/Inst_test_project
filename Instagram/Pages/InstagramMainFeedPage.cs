@@ -1,4 +1,5 @@
-﻿using Instagram.Extensions;
+﻿using System;
+using Instagram.Extensions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
@@ -34,10 +35,17 @@ namespace Instagram.Pages
 
         public InstagramSearchResultsPage SearchForAHashTag(string tag)
         {
-            this.SearchInput.Clear();
-            this.SearchInput.SendKeys(tag);
-            Driver.Wait(10).Until(ExpectedConditions.ElementIsVisible(By.ClassName("_q8rex")));
+            this.SearchInput.SendText(tag);            
+            Driver.WaitForElementVisible(By.ClassName("_q8rex"), 10);
             this.SearchInput.SendKeys(Keys.Enter);                            
+
+            return new InstagramSearchResultsPage(Driver);
+        }
+
+        public InstagramSearchResultsPage OpenResultsForAHashTag(string tag)
+        {
+            Uri uri = new Uri($"https://www.instagram.com/explore/tags/{tag}/");
+            Driver.NavigateGoToUrl(uri);
 
             return new InstagramSearchResultsPage(Driver);
         }

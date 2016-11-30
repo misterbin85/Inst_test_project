@@ -42,20 +42,16 @@ namespace Instagram.Pages
             return this;
         }
 
-        public InstagramSearchResultsPage MakeLike()
+
+        public IWebElement GetFirstPane()
         {
-            IList<IWebElement> panesInRow = this.LoadedRowsWithPanes.First().FindElements(By.TagName("a"));
-            foreach (var pane in panesInRow)
-            {
-                OpenPostDetails(pane).PutLikeAndClose();
-            }
-            return this;
+           return  this.LoadedRowsWithPanes.First().FindElements(By.TagName("a")).First();            
         }
 
 
-        public PostDetails OpenPostDetails(IWebElement pane)
+        public PostDetails OpenFirstPostDetails()
         {
-            pane.ClickJs(Driver);
+            GetFirstPane().ClickJs(Driver);
             return new PostDetails(Driver);                                               
         }
 

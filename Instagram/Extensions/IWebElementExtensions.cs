@@ -14,8 +14,8 @@ namespace Instagram.Extensions
         public static void ClickJs(this IWebElement element, IWebDriver driver)
         {
             ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", element);
+            driver.WaitPageLoaded();
         }
-
 
         public static IWebElement WaitForVisible(this IWebElement element, double seconds = 5.0)
         {
@@ -26,6 +26,12 @@ namespace Instagram.Extensions
             wait.Until(waiter);
 
             return element;
+        }
+
+        public static void SendText(this IWebElement element, string text)
+        {
+            element.Clear();
+            element.SendKeys(text);
         }
     }
 }
