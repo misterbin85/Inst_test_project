@@ -1,7 +1,6 @@
 ﻿using Instagram.Extensions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
-using OpenQA.Selenium.Support.UI;
 
 namespace Instagram.Pages
 {
@@ -27,16 +26,15 @@ namespace Instagram.Pages
 
         #endregion
 
-        #region 'Constructor'
+#region 'Constructor'
 
         public InstagramLoginPage(IWebDriver driver)
         {
-            driver.Wait(5).Until(ExpectedConditions.ElementIsVisible(By.XPath(UserNameInputPath)));
+            driver.WaitForElementVisible(By.XPath(UserNameInputPath),5);
             this.Driver = driver;
             PageFactory.InitElements(Driver, this);
         }
-
-        #endregion
+#endregion
 
         #region 'Methods'
 

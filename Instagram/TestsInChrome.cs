@@ -32,12 +32,13 @@ namespace Instagram
         [Test]
         public void Try()
         {
-            Driver.OpenPage<InstagramSignUpPage>(new Uri("https://www.instagram.com/"), new object[] { Driver })
+            Driver.OpenPage<InstagramSignUpPage>(new Uri("https://www.instagram.com/"), new object[] {Driver})
                 .OpenLogin()
                 .LoginToInstagram(_userName, _password)
-                .SearchForAHashTag("#montenegro")
+                .OpenResultsForAHashTag("montenegro")
                 .LoadMoreResults()
-                .MakeLike();
+                .OpenFirstPostDetails()
+                .MakeLikesOnPostDetails(10);
         }
 
     }
