@@ -17,6 +17,18 @@ namespace Instagram.Extensions
             driver.WaitPageLoaded();
         }
 
+        public static void ClickJsEvent(this IWebElement element, IWebDriver driver)
+        {
+            const string mouseOverScript = @"if(document.createEvent)
+                                                {var evObj = document.createEvent('MouseEvents');
+                                                evObj.initEvent('click', true, false);
+                                                arguments[0].dispatchEvent(evObj);}
+                                                else if(document.createEventObject)
+                                                { arguments[0].fireEvent('onclick');}";
+            ((IJavaScriptExecutor)driver).ExecuteScript(mouseOverScript, element);
+        }
+
+
         public static IWebElement WaitForVisible(this IWebElement element, double seconds = 5.0)
         {
             IWait<IWebElement> wait = new DefaultWait<IWebElement>(element);

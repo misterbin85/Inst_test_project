@@ -40,7 +40,7 @@ namespace Instagram.Pages
         public PostDetails(IWebDriver driver)
         {
             driver.WaitPageLoaded();
-            driver.WaitForElementExists(By.XPath(ArticlePath), 10);
+            driver.WaitForElementExists(By.XPath(ArticlePath), 10).WaitForVisible();
             this.Driver = driver;
             PageFactory.InitElements(driver, this);
         }
@@ -92,7 +92,7 @@ namespace Instagram.Pages
         private void PutLike()
         {
             Driver.WaitForElementVisible(By.XPath(OpenHeartPath));
-            this.OpenHeart.ClickJs(Driver);
+            this.OpenHeart.ClickJsEvent(Driver);
             Driver.WaitForElementExists(By.XPath(FullHeartPath), 2);
             Thread.Sleep(1500);
         }
