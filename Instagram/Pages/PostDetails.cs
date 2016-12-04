@@ -19,6 +19,8 @@ namespace Instagram.Pages
         private const string CloseDetailsButtonPath = "//button[@class='_3eajp']";
         private const string RightPaginatorArrowPath = "//a[contains(@class,'coreSpriteRightPaginationArrow')]";
 
+        private static int numberOfLikedPics;
+        Random r;
 
         [FindsBy(How = How.XPath, Using = ArticlePath)]
         private IWebElement MainArticleHolder;
@@ -81,20 +83,23 @@ namespace Instagram.Pages
                 else
                 {
                     PutLike();
+                    ++numberOfLikedPics;
                     GoToNextPostDetails();
                 }
             }
-                        
+            Console.WriteLine("numberOfLikedPics = "+ numberOfLikedPics);            
             return ClosePostDetailsPage();
         }
 
 
         private void PutLike()
         {
+            r = new Random();
+            
             Driver.WaitForElementVisible(By.XPath(OpenHeartPath));
             this.OpenHeart.ClickJsEvent(Driver);
             Driver.WaitForElementExists(By.XPath(FullHeartPath), 2);
-            Thread.Sleep(1500);
+            Thread.Sleep(GetRandomITime(r, 1500, 2000));
         }
 
         private PostDetails GoToNextPostDetails()
@@ -108,6 +113,11 @@ namespace Instagram.Pages
         {
             this.CloseButton.ClickJs(Driver);
             return new InstagramSearchResultsPage(Driver);
+        }
+
+        private int GetRandomITime(Random r, int first, int second)
+        {
+            return r.Next(first, second);
         }
 
 #endregion
