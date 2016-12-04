@@ -35,10 +35,10 @@ namespace Instagram
             Driver.OpenPage<InstagramSignUpPage>(new Uri("https://www.instagram.com/"), new object[] {Driver})
                 .OpenLogin()
                 .LoginToInstagram(_userName, _password)
-                .OpenResultsForAHashTag("montenegro")
+                .OpenResultsForAHashTag("flickr")
                 .LoadMoreResults()
                 .OpenFirstPostDetails()
-                .MakeLikesOnPostDetails(10);
+                .MakeLikesOnPostDetails(50);
         }
 
     }
