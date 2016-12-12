@@ -12,8 +12,11 @@ namespace Instagram
     public class TestsInChrome : SetUp
     {
         private IWebDriver Driver;
+        private const string URL = "https://www.instagram.com/";
         private string _userName = ConfigurationManager.AppSettings["UserName"];
         private string _password = ConfigurationManager.AppSettings["Password"];
+
+        string[] hashtags = System.IO.File.ReadAllLines(ConfigurationManager.AppSettings["Hashtags"]);
 
 
         [SetUp]
@@ -30,15 +33,23 @@ namespace Instagram
         }
 
         [Test]
+        [Description("Make Likes")]
         public void Try()
         {
-            Driver.OpenPage<InstagramSignUpPage>(new Uri("https://www.instagram.com/"), new object[] {Driver})
-                .OpenLogin()
-                .LoginToInstagram(_userName, _password)
-                .OpenResultsForAHashTag("flickr")
-                .LoadMoreResults()
-                .OpenFirstPostDetails()
-                .MakeLikesOnPostDetails(50);
+            var instagramMainFeedPage = Driver.OpenPage<InstagramSignUpPage>(new Uri(URL), new object[] { Driver })
+                  .OpenLogin()
+                  .LoginToInstagram(_userName, _password);
+
+            foreach (string hashtag in hashtags)
+            {
+                instagramMainFeedPage
+                  .OpenResultsForAHashTag(hashtag)
+                  .LoadMoreResults()
+                  .OpenFirstPostDetails()
+                  .MakeLikesOnPostDetails(50);
+            }
+
+
         }
 
     }
