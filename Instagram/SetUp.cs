@@ -25,6 +25,7 @@ namespace Instagram
       public virtual void OneTimeTearDown()
       {
           Inj.kernel.Get<IBrowsers>().DisposeCurrentBrowser();
+          Inj.Driver.Dispose();
           Inj.kernel.Dispose();
       }
   }
