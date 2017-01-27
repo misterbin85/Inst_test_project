@@ -1,24 +1,31 @@
 ﻿using NUnit.Framework;
 using Ninject;
+using OpenQA.Selenium;
 
 namespace Instagram
 {
-  public class SetUp
-  {
-    public StandardKernel kernel;
 
+    public class Inj
+    {
+        public static StandardKernel kernel { get; set; }
+        public static IWebDriver Driver { get; set; }
+    }
+
+
+  public class SetUp
+  {    
       [OneTimeSetUp]
       public virtual void OneTimeSetUp()
       {
-          kernel = new StandardKernel();
-          kernel.Bind<IBrowsers>().To<Browsers>();
+          Inj.kernel = new StandardKernel();
+          Inj.kernel.Bind<IBrowsers>().To<Browsers>().InThreadScope();
       }
 
       [OneTimeTearDown]
       public virtual void OneTimeTearDown()
       {
-          kernel.Get<IBrowsers>().DisposeCurrentBrowser();
-          kernel.Dispose();
+          Inj.kernel.Get<IBrowsers>().DisposeCurrentBrowser();
+          Inj.kernel.Dispose();
       }
   }
 }

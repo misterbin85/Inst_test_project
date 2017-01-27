@@ -39,12 +39,12 @@ namespace Instagram.Pages
 
 #region 'Constructor'
 
-        public PostDetails(IWebDriver driver)
+        public PostDetails()
         {
-            driver.WaitPageLoaded();
-            driver.WaitForElementExists(By.XPath(ArticlePath), 10).WaitForVisible();
-            this.Driver = driver;
-            PageFactory.InitElements(driver, this);
+            this.Driver = Inj.Driver;
+            Driver.WaitPageLoaded();
+            Driver.WaitForElementExists(By.XPath(ArticlePath), 10).WaitForVisible();           
+            PageFactory.InitElements(Driver, this);
         }
 
 #endregion
@@ -94,30 +94,29 @@ namespace Instagram.Pages
 
         private void PutLike()
         {
-            r = new Random();
-            
+            r = new Random();            
             Driver.WaitForElementVisible(By.XPath(OpenHeartPath));
             this.OpenHeart.ClickJsEvent(Driver);
             Driver.WaitForElementExists(By.XPath(FullHeartPath), 2);
-            Thread.Sleep(GetRandomITime(r, 1500, 2000));
+            Thread.Sleep(GetRandomTime(r, 1500, 2000));
         }
 
         private PostDetails GoToNextPostDetails()
         {
             Driver.WaitForElementExists(By.XPath(RightPaginatorArrowPath), 2).ClickJs(Driver);
-            return new PostDetails(Driver);
+            return new PostDetails();
         }
 
 
         private InstagramSearchResultsPage ClosePostDetailsPage()
         {
             this.CloseButton.ClickJs(Driver);
-            return new InstagramSearchResultsPage(Driver);
+            return new InstagramSearchResultsPage();
         }
 
-        private int GetRandomITime(Random r, int first, int second)
+        private int GetRandomTime(Random rand, int first, int second)
         {
-            return r.Next(first, second);
+            return rand.Next(first, second);
         }
 
 #endregion

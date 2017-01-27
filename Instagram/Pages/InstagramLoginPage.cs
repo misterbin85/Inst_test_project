@@ -12,7 +12,7 @@ namespace Instagram.Pages
         private IWebDriver Driver;
         private const string UserNameInputPath = "//input[@name='username']";
         private const string PasswordInputPath = "//input[@name='password']";
-        private const string LoginButtonPath = "//button[contains(@class,'_aj7mu')]";
+        private const string LoginButtonPath = "//form//button";
 
 
         [FindsBy(How = How.XPath, Using = UserNameInputPath)]
@@ -28,10 +28,10 @@ namespace Instagram.Pages
 
 #region 'Constructor'
 
-        public InstagramLoginPage(IWebDriver driver)
+        public InstagramLoginPage()
         {
-            driver.WaitForElementVisible(By.XPath(UserNameInputPath),5);
-            this.Driver = driver;
+            Driver = Inj.Driver;
+            Driver.WaitForElementVisible(By.XPath(UserNameInputPath),5);
             PageFactory.InitElements(Driver, this);
         }
 #endregion
@@ -44,7 +44,7 @@ namespace Instagram.Pages
             this.Password.SendKeys(password);
             this.LoginButton.Click();
 
-            return new InstagramMainFeedPage(Driver);
+            return new InstagramMainFeedPage();
         }
 
         #endregion

@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using Instagram.Extensions;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 
 namespace Instagram.Pages
@@ -6,7 +8,7 @@ namespace Instagram.Pages
     public class InstagramSignUpPage
     {
 
-#region 'Properties and controls'
+#region 'Properties and controls'        
 
         private IWebDriver Driver;
 
@@ -17,23 +19,26 @@ namespace Instagram.Pages
 
 #region 'Constructor'        
 
-        public InstagramSignUpPage(IWebDriver driver)
-        {
-            this.Driver = driver;
-            PageFactory.InitElements(driver, this);
-        }
-
         public InstagramSignUpPage()
-        { }
+        {
+            this.Driver = Inj.Driver;
+            PageFactory.InitElements(Driver, this);
+        }
 
 #endregion
 
 #region 'Methods'
 
+        public void Go(Uri pageUri)
+        {
+            Driver.NavigateGoToUrl(pageUri);
+        }
+
+
         public InstagramLoginPage OpenLogin()
         {
             this.LoginLink.Click();
-            return new InstagramLoginPage(Driver);
+            return new InstagramLoginPage();
         } 
 
 #endregion

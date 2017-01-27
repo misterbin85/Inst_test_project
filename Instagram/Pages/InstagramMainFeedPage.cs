@@ -6,7 +6,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace Instagram.Pages
 {
-    public class InstagramMainFeedPage : BaseInstPage
+    public class InstagramMainFeedPage
     {
 
 #region 'Fields and controls'
@@ -21,12 +21,11 @@ namespace Instagram.Pages
 
 #region 'Constructor'
 
-        public InstagramMainFeedPage(IWebDriver driver)
-            :base(driver)
+        public InstagramMainFeedPage()
         {
-            driver.Wait().Until(ExpectedConditions.ElementIsVisible(By.XPath(SearchInputPath)));
-            this.Driver = driver;
-            PageFactory.InitElements(driver, this);
+            Driver = Inj.Driver;
+            Driver.Wait().Until(ExpectedConditions.ElementIsVisible(By.XPath(SearchInputPath)));
+            PageFactory.InitElements(Driver, this);
         }
 
 #endregion
@@ -39,7 +38,7 @@ namespace Instagram.Pages
             Driver.WaitForElementVisible(By.ClassName("_q8rex"), 10);
             this.SearchInput.SendKeys(Keys.Enter);                            
 
-            return new InstagramSearchResultsPage(Driver);
+            return new InstagramSearchResultsPage();
         }
 
         public InstagramSearchResultsPage OpenResultsForAHashTag(string tag)
@@ -47,7 +46,7 @@ namespace Instagram.Pages
             Uri uri = new Uri($"https://www.instagram.com/explore/tags/{tag}/");
             Driver.NavigateGoToUrl(uri);
 
-            return new InstagramSearchResultsPage(Driver);
+            return new InstagramSearchResultsPage();
         }
 
 #endregion
