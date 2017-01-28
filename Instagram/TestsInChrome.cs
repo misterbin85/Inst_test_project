@@ -10,8 +10,13 @@ namespace Instagram
     [TestFixture]
     public class TestsInChrome : SetUp
     {
+        private IWebDriver Driver;
+        private const string URL = "https://www.instagram.com/";
+
         private string _userName = ConfigurationManager.AppSettings["UserName"];
         private string _password = ConfigurationManager.AppSettings["Password"];
+
+        string[] hashtags = System.IO.File.ReadAllLines(ConfigurationManager.AppSettings["Hashtags"]);
 
 
         [SetUp]
@@ -28,6 +33,7 @@ namespace Instagram
         }
 
         [Test]
+        [Description("Make Likes")]
         public void Try()
         {
             InstPages.InstagramSignUpP.Go(new Uri("https://www.instagram.com/"));
@@ -36,7 +42,7 @@ namespace Instagram
                 .OpenResultsForAHashTag("flickr")
                 .LoadMoreResults()
                 .OpenFirstPostDetails()
-                .MakeLikesOnPostDetails(10);                
+                .MakeLikesOnPostDetails(10);
         }
 
     }
