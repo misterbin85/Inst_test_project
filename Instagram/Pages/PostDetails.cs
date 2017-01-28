@@ -72,7 +72,7 @@ namespace Instagram.Pages
             return true;
         }
 
-        public InstagramSearchResultsPage MakeLikesOnPostDetails(int numberOfLikedPosts)
+        public InstagramSearchResultsPage PutLikesOnPostDetails(int numberOfLikedPosts)
         {
             for (var i = 0; i < numberOfLikedPosts; i++)
             {

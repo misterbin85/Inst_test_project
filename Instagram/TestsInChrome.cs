@@ -1,22 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using Instagram.Extensions;
 using Instagram.Pages;
 using Ninject;
 using NUnit.Framework;
 using System.Configuration;
+using System.Linq;
 
 namespace Instagram
 {
     [TestFixture]
     public class TestsInChrome : SetUp
     {
-        private IWebDriver Driver;
-        private const string URL = "https://www.instagram.com/";
-
+        private static readonly Uri URL = new Uri(ConfigurationManager.AppSettings["InstagramUri"]);
         private string _userName = ConfigurationManager.AppSettings["UserName"];
         private string _password = ConfigurationManager.AppSettings["Password"];
 
-        string[] hashtags = System.IO.File.ReadAllLines(ConfigurationManager.AppSettings["Hashtags"]);
+        private List<string> hashtags = System.IO.File.ReadAllLines(ConfigurationManager.AppSettings["Hashtags"]).ToList();
 
 
         [SetUp]
@@ -33,17 +33,19 @@ namespace Instagram
         }
 
         [Test]
+        [TestCase(10)]
         [Description("Make Likes")]
-        public void Try()
+        public void LetsPutSomeLikes(int numberOfPosts)
         {
-            InstPages.InstagramSignUpP.Go(new Uri("https://www.instagram.com/"));
-            InstPages.InstagramSignUpP.OpenLogin()
-                .LoginToInstagram(_userName, _password)
-                .OpenResultsForAHashTag("flickr")
-                .LoadMoreResults()
-                .OpenFirstPostDetails()
-                .MakeLikesOnPostDetails(10);
-        }
+           InstPages.InstagramSignUpP.Go(URL);
+           InstagramMainFeedPage feedPage =  InstPages.InstagramSignUpP.OpenLogin()
+                .LoginToInstagram(_userName, _password);
 
+            hashtags.ForEach(
+                tag => feedPage.OpenResultsForAHashTag(tag)
+                    .LoadMoreResults()
+                    .OpenFirstPostDetails()
+                    .PutLikesOnPostDetails(numberOfPosts));
+        }       
     }
 }
