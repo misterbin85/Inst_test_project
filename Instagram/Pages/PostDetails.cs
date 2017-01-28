@@ -58,7 +58,7 @@ namespace Instagram.Pages
             {
                 return ClosePostDetailsPage();
             }
-            this.OpenHeart.ClickJs(Driver);
+            this.OpenHeart.ClickJs();
             Driver.WaitForElementExists(By.XPath(FullHeartPath), 2);
             return ClosePostDetailsPage();
         }
@@ -96,21 +96,21 @@ namespace Instagram.Pages
         {
             r = new Random();            
             Driver.WaitForElementVisible(By.XPath(OpenHeartPath));
-            this.OpenHeart.ClickJsEvent(Driver);
+            this.OpenHeart.ClickJsEvent();
             Driver.WaitForElementExists(By.XPath(FullHeartPath), 2);
             Thread.Sleep(GetRandomTime(r, 1500, 2000));
         }
 
         private PostDetails GoToNextPostDetails()
         {
-            Driver.WaitForElementExists(By.XPath(RightPaginatorArrowPath), 2).ClickJs(Driver);
+            Driver.WaitForElementExists(By.XPath(RightPaginatorArrowPath), 2).ClickJs();
             return new PostDetails();
         }
 
 
         private InstagramSearchResultsPage ClosePostDetailsPage()
         {
-            this.CloseButton.ClickJs(Driver);
+            this.CloseButton.ClickJs();
             return new InstagramSearchResultsPage();
         }
 

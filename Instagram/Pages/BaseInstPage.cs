@@ -40,7 +40,7 @@ namespace Instagram.Pages
         public void CheckAndCloseAppBannerHint(int waitForItSec = 0)
         {
             if (!Driver.IsElementExists(By.XPath(AppBannerHintCloseButtonPath), waitForItSec)) return;
-            this.AppBannerHintCloseButton.ClickJs(Driver);
+            this.AppBannerHintCloseButton.ClickJs();
             Driver.WaitForElementInvisible(By.XPath(AppBannerHintCloseButtonPath), 3);
         }
     }

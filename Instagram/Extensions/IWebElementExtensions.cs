@@ -6,28 +6,29 @@ namespace Instagram.Extensions
 {
     public static class IWebElementExtensions
     {
-        public static void ScrollIntoView(this IWebElement element, IWebDriver driver)
+        private static IWebDriver Driver = Inj.Driver;
+
+        public static void ScrollIntoView(this IWebElement element)
         {
-            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+            ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
         }
 
-        public static void ClickJs(this IWebElement element, IWebDriver driver)
+        public static void ClickJs(this IWebElement element)
         {
-            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", element);
-            driver.WaitPageLoaded();
+            ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", element);
+            Driver.WaitPageLoaded();
         }
 
-        public static void ClickJsEvent(this IWebElement element, IWebDriver driver)
+        public static void ClickJsEvent(this IWebElement element)
         {
-            const string mouseOverScript = @"if(document.createEvent)
+            const string mouseClickScript = @"if(document.createEvent)
                                                 {var evObj = document.createEvent('MouseEvents');
                                                 evObj.initEvent('click', true, false);
                                                 arguments[0].dispatchEvent(evObj);}
                                                 else if(document.createEventObject)
                                                 { arguments[0].fireEvent('onclick');}";
-            ((IJavaScriptExecutor)driver).ExecuteScript(mouseOverScript, element);
+            ((IJavaScriptExecutor)Driver).ExecuteScript(mouseClickScript, element);
         }
-
 
         public static IWebElement WaitForVisible(this IWebElement element, double seconds = 5.0)
         {

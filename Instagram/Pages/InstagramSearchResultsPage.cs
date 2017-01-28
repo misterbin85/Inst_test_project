@@ -36,7 +36,7 @@ namespace Instagram.Pages
 
         public InstagramSearchResultsPage LoadMoreResults()
         {            
-            this.LoadMoreButton.ScrollIntoView(Driver);
+            this.LoadMoreButton.ScrollIntoView();
             this.LoadMoreButton.Click();
             return this;
         }
@@ -50,7 +50,7 @@ namespace Instagram.Pages
 
         public PostDetails OpenFirstPostDetails()
         {
-            GetFirstPane().ClickJs(Driver);
+            GetFirstPane().ClickJs();
             return new PostDetails();                                               
         }
 
