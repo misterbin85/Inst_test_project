@@ -63,7 +63,7 @@ namespace Instagram
     }
 
 
-      public void DisposeCurrentBrowser()
+    public void DisposeCurrentBrowser()
       {
           ChromeDriverInstance?.Dispose();
           PhantomDriverInstance?.Dispose();

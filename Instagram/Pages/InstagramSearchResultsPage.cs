@@ -23,12 +23,11 @@ namespace Instagram.Pages
 
 #region 'Constructor'
 
-        public InstagramSearchResultsPage(IWebDriver driver)
-            : base(driver)
+        public InstagramSearchResultsPage()
         {
-            driver.WaitForElementVisible(By.ClassName("_s53mj"));
-            this.Driver = driver;
-            PageFactory.InitElements(driver, this);
+            Driver = Inj.Driver;
+            Driver.WaitForElementVisible(By.ClassName("_s53mj"));            
+            PageFactory.InitElements(Driver, this);
         }
 
 #endregion
@@ -37,7 +36,7 @@ namespace Instagram.Pages
 
         public InstagramSearchResultsPage LoadMoreResults()
         {            
-            this.LoadMoreButton.ScrollIntoView(Driver);
+            this.LoadMoreButton.ScrollIntoView();
             this.LoadMoreButton.Click();
             return this;
         }
@@ -51,8 +50,8 @@ namespace Instagram.Pages
 
         public PostDetails OpenFirstPostDetails()
         {
-            GetFirstPane().ClickJs(Driver);
-            return new PostDetails(Driver);                                               
+            GetFirstPane().ClickJs();
+            return new PostDetails();                                               
         }
 
 #endregion

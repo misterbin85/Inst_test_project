@@ -3,7 +3,6 @@ using Instagram.Extensions;
 using Instagram.Pages;
 using Ninject;
 using NUnit.Framework;
-using OpenQA.Selenium;
 using System.Configuration;
 
 namespace Instagram
@@ -13,6 +12,7 @@ namespace Instagram
     {
         private IWebDriver Driver;
         private const string URL = "https://www.instagram.com/";
+
         private string _userName = ConfigurationManager.AppSettings["UserName"];
         private string _password = ConfigurationManager.AppSettings["Password"];
 
@@ -22,34 +22,27 @@ namespace Instagram
         [SetUp]
         public void SetUp()
         {
-            Driver = kernel.Get<IBrowsers>().GetChromeDriver();
+            Inj.Driver = Inj.kernel.Get<IBrowsers>().GetChromeDriver();
         }
 
         [TearDown]
         public void TearDown()
         {
-            Driver.Manage().Cookies.DeleteAllCookies();
-            Driver.CLearBrowserLocalStorage();
+            Inj.Driver.Manage().Cookies.DeleteAllCookies();
+            Inj.Driver.CLearBrowserLocalStorage();
         }
 
         [Test]
         [Description("Make Likes")]
         public void Try()
         {
-            var instagramMainFeedPage = Driver.OpenPage<InstagramSignUpPage>(new Uri(URL), new object[] { Driver })
-                  .OpenLogin()
-                  .LoginToInstagram(_userName, _password);
-
-            foreach (string hashtag in hashtags)
-            {
-                instagramMainFeedPage
-                  .OpenResultsForAHashTag(hashtag)
-                  .LoadMoreResults()
-                  .OpenFirstPostDetails()
-                  .MakeLikesOnPostDetails(50);
-            }
-
-
+            InstPages.InstagramSignUpP.Go(new Uri("https://www.instagram.com/"));
+            InstPages.InstagramSignUpP.OpenLogin()
+                .LoginToInstagram(_userName, _password)
+                .OpenResultsForAHashTag("flickr")
+                .LoadMoreResults()
+                .OpenFirstPostDetails()
+                .MakeLikesOnPostDetails(10);
         }
 
     }

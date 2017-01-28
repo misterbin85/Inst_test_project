@@ -1,18 +1,20 @@
-﻿using Instagram.Extensions;
+﻿using System;
+using Instagram.Extensions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 
 namespace Instagram.Pages
 {
-    public abstract class BaseInstPage
+    public class BaseInstPage
     {
 
-#region 'Fields and properties'
-
-        private IWebDriver Driver;
+#region 'Fields and properties'        
 
         private const string AppBannerHintCloseButtonPath = "//span[@class='_8yoiv']";
         private const string DesktopNavLogoAndWordmarkPath = "//a[contains(@class,'coreSpriteDesktopNavLogoAndWordmark')]";
+
+
+        private IWebDriver Driver;
 
         [FindsBy(How = How.XPath, Using = AppBannerHintCloseButtonPath)]
         private IWebElement AppBannerHintCloseButton;
@@ -21,22 +23,24 @@ namespace Instagram.Pages
 
 #region 'Constructors'
 
-        protected BaseInstPage(IWebDriver driver)
+        public BaseInstPage()
         {
-            driver.WaitForElementVisible(By.XPath(DesktopNavLogoAndWordmarkPath));
-            this.Driver = driver;
-            PageFactory.InitElements(driver, this);
+            this.Driver = Inj.Driver;
+            Driver.WaitForElementVisible(By.XPath(DesktopNavLogoAndWordmarkPath));            
+            PageFactory.InitElements(Driver, this);
         }
 
-        protected BaseInstPage()
-        { }
-
 #endregion
+
+        public void Go(Uri pageUri)
+        {
+            Driver.NavigateGoToUrl(pageUri);
+        }
 
         public void CheckAndCloseAppBannerHint(int waitForItSec = 0)
         {
             if (!Driver.IsElementExists(By.XPath(AppBannerHintCloseButtonPath), waitForItSec)) return;
-            this.AppBannerHintCloseButton.ClickJs(Driver);
+            this.AppBannerHintCloseButton.ClickJs();
             Driver.WaitForElementInvisible(By.XPath(AppBannerHintCloseButtonPath), 3);
         }
     }
