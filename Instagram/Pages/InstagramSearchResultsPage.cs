@@ -13,7 +13,7 @@ namespace Instagram.Pages
 
         private IWebDriver Driver;
 
-        [FindsBy(How = How.ClassName, Using = "_oidfu")]
+        [FindsBy(How = How.ClassName, Using = "_8imhp")]
         private IWebElement LoadMoreButton;
 
         [FindsBy(How = How.XPath, Using = @"//div[@class='_myci9']")]

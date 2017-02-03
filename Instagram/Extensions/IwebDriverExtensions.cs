@@ -24,12 +24,12 @@ namespace Instagram.Extensions
         public static void NavigateGoToUrl(this IWebDriver driver, Uri uri)
         {
             driver.Navigate().GoToUrl(uri);
-            driver.Wait().Until(d => (bool) (d as IJavaScriptExecutor).ExecuteScript("return document.readyState == 'complete'"));
+            driver.WaitPageLoaded();
         }
 
         public static void WaitPageLoaded(this IWebDriver driver)
         {
-            driver.Wait(7).Until(d => (bool)(d as IJavaScriptExecutor).ExecuteScript("return document.readyState == 'complete'"));
+            driver.Wait().Until(d => (bool)(d as IJavaScriptExecutor).ExecuteScript("return document.readyState == 'complete'"));
         }
 
         public static IEnumerable<Cookie> GetBrowserCookies(this IWebDriver driver)
@@ -79,15 +79,13 @@ namespace Instagram.Extensions
                 driver.FindElement(by);
                 return true;
             }
-            catch (Exception)
+            catch (NoSuchElementException)
             {
                 if (attemptsToWait == 0) return false;
 
                 attemptsToWait--;
                 Thread.Sleep(1000);
-                IsElementExists(driver, by, attemptsToWait);
-
-                return false;
+                return IsElementExists(driver, by, attemptsToWait);                
             }
         }
 

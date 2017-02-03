@@ -15,18 +15,26 @@ namespace Instagram.Extensions
 
         public static void ClickJs(this IWebElement element)
         {
-            ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", element);
+            element.WaitForVisible();
+            ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].focus(); arguments[0].click();", element);
             Driver.WaitPageLoaded();
         }
 
-        public static void ClickJsEvent(this IWebElement element)
+        public static void FocusElementJs(this IWebElement element)
         {
+            ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].focus();", element);
+        }
+
+        public static void ClickJsEvent(this IWebElement element)
+        {            
             const string mouseClickScript = @"if(document.createEvent)
                                                 {var evObj = document.createEvent('MouseEvents');
                                                 evObj.initEvent('click', true, false);
                                                 arguments[0].dispatchEvent(evObj);}
                                                 else if(document.createEventObject)
                                                 { arguments[0].fireEvent('onclick');}";
+            element.WaitForVisible();
+            element.FocusElementJs();
             ((IJavaScriptExecutor)Driver).ExecuteScript(mouseClickScript, element);
         }
 
@@ -43,6 +51,7 @@ namespace Instagram.Extensions
 
         public static void SendText(this IWebElement element, string text)
         {
+            element.WaitForVisible();
             element.Clear();
             element.SendKeys(text);
         }

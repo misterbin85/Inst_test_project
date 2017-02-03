@@ -5,6 +5,7 @@ using Instagram.Pages;
 using Ninject;
 using NUnit.Framework;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 
 namespace Instagram
@@ -16,7 +17,7 @@ namespace Instagram
         private string _userName = ConfigurationManager.AppSettings["UserName"];
         private string _password = ConfigurationManager.AppSettings["Password"];
 
-        private List<string> hashtags = System.IO.File.ReadAllLines(ConfigurationManager.AppSettings["Hashtags"]).ToList();
+        private List<string> hashtags = File.ReadAllLines(ConfigurationManager.AppSettings["Hashtags"]).ToList();
 
 
         [SetUp]
@@ -32,12 +33,13 @@ namespace Instagram
             Inj.Driver.CLearBrowserLocalStorage();
         }
 
+
         [Test]
-        [TestCase(10)]
+        [TestCase(70)]
         [Description("Make Likes")]
         public void LetsPutSomeLikes(int numberOfPosts)
         {
-           InstPages.InstagramSignUpP.Go(URL);
+           InstPages.InstagramSignUpP.Open(URL);
            InstagramMainFeedPage feedPage =  InstPages.InstagramSignUpP.OpenLogin()
                 .LoginToInstagram(_userName, _password);
 

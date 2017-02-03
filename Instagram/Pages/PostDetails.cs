@@ -66,7 +66,7 @@ namespace Instagram.Pages
 
         private bool AlreadyLiked()
         {
-            if (Driver.IsElementExists(By.XPath(OpenHeartPath), 1)) return false;
+            if (Driver.IsElementExists(By.XPath(OpenHeartPath), 3)) return false;
 
             Console.WriteLine("'Like' is already posted. Continue to next...");
             return true;
@@ -114,7 +114,7 @@ namespace Instagram.Pages
             return new InstagramSearchResultsPage();
         }
 
-        private int GetRandomTime(Random rand, int first, int second)
+        private static int GetRandomTime(Random rand, int first, int second)
         {
             return rand.Next(first, second);
         }
