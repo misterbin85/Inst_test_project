@@ -103,6 +103,18 @@ namespace Instagram.Pages
 
         private PostDetails GoToNextPostDetails()
         {
+            bool flag = false;
+            try
+            {
+                flag = Driver.FindElement(By.XPath("//body[contains(@class, 'dialog-404')]")).Enabled;
+            }
+            catch (Exception)
+            {  }
+            if (flag)
+            {
+                //need to add logic to exit this method and refresh hashtags.ForEach
+                Console.WriteLine("ERROR");
+            }
             Driver.WaitForElementExists(By.XPath(RightPaginatorArrowPath), 2).ClickJs();
             return new PostDetails();
         }
