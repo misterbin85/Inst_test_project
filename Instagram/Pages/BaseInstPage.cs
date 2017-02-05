@@ -25,8 +25,8 @@ namespace Instagram.Pages
 
         public BaseInstPage()
         {
+            Inj.Driver.WaitForElementVisible(By.XPath(DesktopNavLogoAndWordmarkPath));
             this.Driver = Inj.Driver;
-            Driver.WaitForElementVisible(By.XPath(DesktopNavLogoAndWordmarkPath));            
             PageFactory.InitElements(Driver, this);
         }
 

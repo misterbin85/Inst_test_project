@@ -13,8 +13,10 @@ namespace Instagram.Pages
 
         private IWebDriver Driver;
 
-        [FindsBy(How = How.ClassName, Using = "_oidfu")]
-        private IWebElement LoadMoreButton;
+        private IWebElement LoadMoreButton { get
+        {
+            return Driver.WaitForElementExists(By.XPath("//a[contains(@class,'_8imhp')]"));
+        } }
 
         [FindsBy(How = How.XPath, Using = @"//div[@class='_myci9']")]
         private IList<IWebElement> LoadedRowsWithPanes;
@@ -36,6 +38,7 @@ namespace Instagram.Pages
 
         public InstagramSearchResultsPage LoadMoreResults()
         {            
+
             this.LoadMoreButton.ScrollIntoView();
             this.LoadMoreButton.Click();
             return this;

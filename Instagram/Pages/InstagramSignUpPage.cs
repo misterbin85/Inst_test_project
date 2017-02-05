@@ -29,7 +29,7 @@ namespace Instagram.Pages
 
 #region 'Methods'
 
-        public void Go(Uri pageUri)
+        public void Open(Uri pageUri)
         {
             Driver.NavigateGoToUrl(pageUri);
         }

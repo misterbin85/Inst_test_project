@@ -13,7 +13,16 @@ namespace Instagram
 
 
   public class SetUp
-  {    
+  {      
+      ~SetUp()
+      {
+          if (Inj.Driver!= null)
+          {
+              Inj.Driver.Dispose();
+              Inj.Driver = null;
+          }  
+      }
+
       [OneTimeSetUp]
       public virtual void OneTimeSetUp()
       {
