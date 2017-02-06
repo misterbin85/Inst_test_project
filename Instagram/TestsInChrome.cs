@@ -43,9 +43,8 @@ namespace Instagram
            InstagramMainFeedPage feedPage =  InstPages.InstagramSignUpP.OpenLogin()
                 .LoginToInstagram(_userName, _password);
 
-            hashtags.ForEach(
-                tag => feedPage.OpenResultsForAHashTag(tag)
-                    .LoadMoreResults()
+            hashtags.ForEach(tag =>
+                     feedPage.OpenResultsForAHashTag(tag)                    
                     .OpenFirstPostDetails()
                     .PutLikesOnPostDetails(numberOfPosts));
         }       

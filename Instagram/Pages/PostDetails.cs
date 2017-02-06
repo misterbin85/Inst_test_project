@@ -13,7 +13,7 @@ namespace Instagram.Pages
 
         private IWebDriver Driver;
 
-        private const string ArticlePath = "//article[@class='_djxz1 _j5hrx']";
+        private const string ArticlePath = "//article[@class='_28qeb _j5hrx']";
         private const string OpenHeartPath = ".//span[contains(@class,'coreSpriteHeartOpen')]";
         private const string FullHeartPath = ".//span[contains(@class,'coreSpriteHeartFull')]";
         private const string CloseDetailsButtonPath = "//button[@class='_3eajp']";
