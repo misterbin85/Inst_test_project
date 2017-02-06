@@ -35,7 +35,7 @@ namespace Instagram
 
 
         [Test]
-        [TestCase(20)]
+        [TestCase(10)]
         [Description("Make Likes")]
         public void LetsPutSomeLikes(int numberOfPosts)
         {
