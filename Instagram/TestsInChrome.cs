@@ -35,7 +35,7 @@ namespace Instagram
 
 
         [Test]
-        [TestCase(20)]
+        [TestCase(10)]
         [Description("Make Likes")]
         public void LetsPutSomeLikes(int numberOfPosts)
         {
@@ -43,9 +43,8 @@ namespace Instagram
            InstagramMainFeedPage feedPage =  InstPages.InstagramSignUpP.OpenLogin()
                 .LoginToInstagram(_userName, _password);
 
-            hashtags.ForEach(
-                tag => feedPage.OpenResultsForAHashTag(tag)
-                    .LoadMoreResults()
+            hashtags.ForEach(tag =>
+                     feedPage.OpenResultsForAHashTag(tag)                    
                     .OpenFirstPostDetails()
                     .PutLikesOnPostDetails(numberOfPosts));
         }       

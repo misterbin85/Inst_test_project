@@ -13,16 +13,16 @@ namespace Instagram.Pages
 
         private IWebDriver Driver;
 
-        private const string ArticlePath = "//article[@class='_djxz1 _j5hrx']";
+        private const string ArticleCss = "article";
         private const string OpenHeartPath = ".//span[contains(@class,'coreSpriteHeartOpen')]";
         private const string FullHeartPath = ".//span[contains(@class,'coreSpriteHeartFull')]";
         private const string CloseDetailsButtonPath = "//button[@class='_3eajp']";
-        private const string RightPaginatorArrowPath = "//a[contains(@class,'coreSpriteRightPaginationArrow')]";
+        private const string RightPaginatorArrowCss = "a[class$=coreSpriteRightPaginationArrow]";
 
         private static int numberOfLikedPics;
         Random r;
 
-        [FindsBy(How = How.XPath, Using = ArticlePath)]
+        [FindsBy(How = How.CssSelector, Using = ArticleCss)]
         private IWebElement MainArticleHolder;
 
         [FindsBy(How = How.XPath, Using = OpenHeartPath)]
@@ -31,7 +31,7 @@ namespace Instagram.Pages
         [FindsBy(How = How.XPath, Using = CloseDetailsButtonPath)]
         private IWebElement CloseButton;
 
-        [FindsBy(How = How.XPath, Using = RightPaginatorArrowPath)]
+        [FindsBy(How = How.CssSelector, Using = RightPaginatorArrowCss)]
         private IWebElement RightPaginatorArrow;
 
         #endregion
@@ -43,7 +43,9 @@ namespace Instagram.Pages
         {
             this.Driver = Inj.Driver;
             Driver.WaitPageLoaded();
-            Driver.WaitForElementExists(By.XPath(ArticlePath), 10).WaitForVisible();
+
+            Driver.WaitForElementExists(By.CssSelector(ArticleCss), 10).WaitForVisible();           
+
             PageFactory.InitElements(Driver, this);
         }
 
@@ -135,7 +137,9 @@ namespace Instagram.Pages
             {
                 //some logic
             }
-                return new PostDetails();
+          
+            Driver.WaitForElementExists(By.CssSelector(RightPaginatorArrowCss), 2).ClickJs();
+            return new PostDetails();
         }
 
 
