@@ -9,7 +9,7 @@ namespace Instagram.Pages
     public class PostDetails
     {
 
-#region 'Fields and controls'
+        #region 'Fields and controls'
 
         private IWebDriver Driver;
 
@@ -34,23 +34,25 @@ namespace Instagram.Pages
         [FindsBy(How = How.CssSelector, Using = RightPaginatorArrowCss)]
         private IWebElement RightPaginatorArrow;
 
-#endregion
+        #endregion
 
 
-#region 'Constructor'
+        #region 'Constructor'
 
         public PostDetails()
         {
             this.Driver = Inj.Driver;
             Driver.WaitPageLoaded();
+
             Driver.WaitForElementExists(By.CssSelector(ArticleCss), 10).WaitForVisible();           
+
             PageFactory.InitElements(Driver, this);
         }
 
-#endregion
+        #endregion
 
 
-#region 'Methods'
+        #region 'Methods'
 
         public InstagramSearchResultsPage PutLikeAndClose()
         {
@@ -62,7 +64,7 @@ namespace Instagram.Pages
             Driver.WaitForElementExists(By.XPath(FullHeartPath), 2);
             return ClosePostDetailsPage();
         }
-        
+
 
         private bool AlreadyLiked()
         {
@@ -76,9 +78,23 @@ namespace Instagram.Pages
         {
             for (var i = 0; i < numberOfLikedPosts; i++)
             {
+                bool flag = false;
+                try
+                {
+                    flag = Driver.FindElement(By.XPath("//body[contains(@class, 'dialog-404')]")).Enabled;
+                }
+                catch (Exception){ }
+
+                if (flag)
+                {
+                    Console.WriteLine("404 ERROR");
+                    Driver.Navigate().Back();
+                    break;
+                }
+
                 if (AlreadyLiked())
                 {
-                    GoToNextPostDetails();                    
+                    GoToNextPostDetails();
                 }
                 else
                 {
@@ -87,34 +103,41 @@ namespace Instagram.Pages
                     GoToNextPostDetails();
                 }
             }
-            Console.WriteLine("numberOfLikedPics = "+ numberOfLikedPics);            
+            Console.WriteLine("Liked = " + numberOfLikedPics);
             return ClosePostDetailsPage();
         }
 
 
         private void PutLike()
         {
-            r = new Random();            
+            r = new Random();
             Driver.WaitForElementVisible(By.XPath(OpenHeartPath));
             this.OpenHeart.ClickJsEvent();
             Driver.WaitForElementExists(By.XPath(FullHeartPath), 2);
             Thread.Sleep(GetRandomTime(r, 1500, 2000));
         }
 
+        //maybe need to change returned type 
         private PostDetails GoToNextPostDetails()
         {
-            bool flag = false;
+            bool isRightPaginationArrow = true;
             try
             {
-                flag = Driver.FindElement(By.XPath("//body[contains(@class, 'dialog-404')]")).Enabled;
+                isRightPaginationArrow = Driver.WaitForElementExists(By.XPath(RightPaginatorArrowPath)).Enabled;
             }
             catch (Exception)
-            {  }
-            if (flag)
             {
-                //need to add logic to exit this method and refresh hashtags.ForEach
-                Console.WriteLine("ERROR");
+
             }
+            if (isRightPaginationArrow)
+            {
+                Driver.WaitForElementExists(By.XPath(RightPaginatorArrowPath), 2).ClickJs();
+            }
+            else
+            {
+                //some logic
+            }
+          
             Driver.WaitForElementExists(By.CssSelector(RightPaginatorArrowCss), 2).ClickJs();
             return new PostDetails();
         }
@@ -131,7 +154,7 @@ namespace Instagram.Pages
             return rand.Next(first, second);
         }
 
-#endregion
+        #endregion
 
     }
 }
