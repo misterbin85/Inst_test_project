@@ -35,18 +35,39 @@ namespace Instagram
 
 
         [Test]
-        [TestCase(10)]
+        [TestCase(70)]
         [Description("Make Likes")]
         public void LetsPutSomeLikes(int numberOfPosts)
         {
-           InstPages.InstagramSignUpP.Open(URL);
-           InstagramMainFeedPage feedPage =  InstPages.InstagramSignUpP.OpenLogin()
-                .LoginToInstagram(_userName, _password);
+            InstPages.InstagramSignUpP.Open(URL);
+            InstagramMainFeedPage feedPage = InstPages.InstagramSignUpP.OpenLogin()
+                 .LoginToInstagram(_userName, _password);
+            InstagramSearchResultsPage page;
+            PostDetails postdet;
+            /* hashtags.ForEach(tag =>
+                      feedPage.OpenResultsForAHashTag(tag)                    
+                     .OpenFirstPostDetails()
+                     .PutLikesOnPostDetails(numberOfPosts));*/
 
-            hashtags.ForEach(tag =>
-                     feedPage.OpenResultsForAHashTag(tag)                    
-                    .OpenFirstPostDetails()
-                    .PutLikesOnPostDetails(numberOfPosts));
+            foreach (string tag in hashtags)
+            {
+                page = feedPage.OpenResultsForAHashTag(tag);
+                postdet = page.OpenFirstPostDetails();
+
+                if (postdet.PutLikesOnPostDetails(numberOfPosts))
+                {
+                    try
+                    {
+                        postdet.ClosePostDetailsPage();
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Close deatails");
+                    }
+                }
+               
+            }
+        
         }       
     }
 }
