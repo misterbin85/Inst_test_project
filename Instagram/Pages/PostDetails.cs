@@ -74,8 +74,9 @@ namespace Instagram.Pages
             return true;
         }
 
-        public InstagramSearchResultsPage PutLikesOnPostDetails(int numberOfLikedPosts)
+        public bool PutLikesOnPostDetails(int numberOfLikedPosts)
         {
+            bool connector = true;
             for (var i = 0; i < numberOfLikedPosts; i++)
             {
                 bool flag = false;
@@ -88,23 +89,38 @@ namespace Instagram.Pages
                 if (flag)
                 {
                     Console.WriteLine("404 ERROR");
-                    Driver.Navigate().Back();
+                    connector = false;
                     break;
                 }
 
                 if (AlreadyLiked())
                 {
-                    GoToNextPostDetails();
+                    if (!GoToNextPostDetails())
+                    {
+                        if (Driver.IsElementExists(By.CssSelector("div.error-container a")))
+                        {
+                            Driver.FindElement(By.CssSelector("div.error-container a")).ClickJs();
+                            connector = false;
+                            break;
+                        }
+                        else { Console.WriteLine("Why"); }
+                    }
                 }
                 else
                 {
                     PutLike();
                     ++numberOfLikedPics;
-                    GoToNextPostDetails();
+                    if (!GoToNextPostDetails())
+                    {
+                        //Driver.WaitForElementExists(By.CssSelector("div.error-container a"), 2).ClickJs();
+                        connector = false;
+                        break;
+                    }
+                    
                 }
             }
             Console.WriteLine("Liked = " + numberOfLikedPics);
-            return ClosePostDetailsPage();
+            return connector;
         }
 
 
@@ -117,33 +133,25 @@ namespace Instagram.Pages
             Thread.Sleep(GetRandomTime(r, 1500, 2000));
         }
 
-        //maybe need to change returned type 
-        private PostDetails GoToNextPostDetails()
+        private bool GoToNextPostDetails()
         {
-            bool isRightPaginationArrow = true;
-            try
+            bool returnedBool = true;
+         
+            if (Driver.IsElementExists(By.CssSelector(RightPaginatorArrowCss)))
             {
-                isRightPaginationArrow = Driver.WaitForElementExists(By.XPath(RightPaginatorArrowPath)).Enabled;
-            }
-            catch (Exception)
-            {
-
-            }
-            if (isRightPaginationArrow)
-            {
-                Driver.WaitForElementExists(By.XPath(RightPaginatorArrowPath), 2).ClickJs();
+                RightPaginatorArrow.ClickJs();
+                
             }
             else
             {
-                //some logic
+                returnedBool = false;
             }
           
-            Driver.WaitForElementExists(By.CssSelector(RightPaginatorArrowCss), 2).ClickJs();
-            return new PostDetails();
+            return returnedBool;
         }
 
 
-        private InstagramSearchResultsPage ClosePostDetailsPage()
+        public InstagramSearchResultsPage ClosePostDetailsPage()
         {
             this.CloseButton.ClickJs();
             return new InstagramSearchResultsPage();
